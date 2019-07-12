@@ -55,8 +55,14 @@ public class QmSecurityBasicImplementation implements QmSecurityBasic {
         }
         LOG.info("※通过授权验证※");
         // 判断token是否过期
-        if (!QmSecurityTokenTools.verifyExp(qmUserInfoAuth.getTokenExpireTime(), qmUserInfoAuth.getSignTime().getTime())) {
-            // ===================token已过期进入==================
+        long tokenExpireTime = qmUserInfoAuth.getTokenExpireTime();
+        long signTime = qmUserInfoAuth.getSignTime().getTime();
+        if (!QmSecurityTokenTools.verifyExp(tokenExpireTime, signTime)) {
+            // ===================token过期==================
+            QmSecurityContent.getRealm().noPassCallBack(5, request, response);
+            return false;
+        } else if (QmSecurityTokenTools.reauthorizationIsRequired(tokenExpireTime, signTime)) {
+            // reauthorizationIsRequired 是否需要重新授权，如果是则走这里。
             LOG.debug("※尝试重新签发token※");
             QmSecurityTokenTools.restartCreateToken(qmUserInfoAuth, response);
             LOG.info("※重新签发token成功※");

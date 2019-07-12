@@ -1,4 +1,4 @@
-#  qm-security - 安全框架
+#  qm-security - 安全框架 1.0.2
 
 ## 描述
 
@@ -29,7 +29,7 @@
 <dependency>
   <groupId>com.starmcc</groupId>
   <artifactId>qm-security</artifactId>
-  <version>x.x.x</version>
+  <version>1.0.2</version>
 </dependency>
 ```
 

@@ -14,6 +14,7 @@ import java.util.Date;
 
 /**
  * 对称加密技术
+ *
  * @author qm
  */
 public class QmSecurityTokenTools {
@@ -97,16 +98,37 @@ public class QmSecurityTokenTools {
      *
      * @param exp
      * @param signTime
-     * @return
+     * @return boolean 失效时返回false
      */
     public static boolean verifyExp(long exp, long signTime) {
+        // 如果exp等于0表示该token永久不过期
+        if (exp == 0) {
+            return true;
+        }
+        Date tokenExp = new Date(signTime + (exp * 1000));
         // 校验token是否失效
-        if (exp != 0) {
-            Date tokenExp = new Date(signTime + (exp * 1000));
-            if (tokenExp.getTime() <= System.currentTimeMillis()) {
-                // 失效了。
-                return false;
-            }
+        if (tokenExp.getTime() <= System.currentTimeMillis()) {
+            // 失效了。
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 判断是否需要重新授权
+     *
+     * @param exp
+     * @param signTime
+     * @return boolean 如果需要重新授权则返回true 否则返回false
+     */
+    public static boolean reauthorizationIsRequired(long exp, long signTime) {
+        // 如果exp等于0表示该token永久不过期
+        if (exp == 0) {
+            return true;
+        }
+        // 机制为 当前时间 是否大于 失效时长 / 2
+        if (System.currentTimeMillis() < ((exp * 1000) / 2)) {
+            return false;
         }
         return true;
     }
