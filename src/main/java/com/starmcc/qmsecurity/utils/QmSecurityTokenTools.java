@@ -126,8 +126,8 @@ public class QmSecurityTokenTools {
         if (exp == 0) {
             return true;
         }
-        // 机制为 当前时间 是否大于 失效时长 / 2
-        if (System.currentTimeMillis() < ((exp * 1000) / 2)) {
+        // 机制为 当前时间 是否小于 (签发时间 + 失效时长 / 2)
+        if (System.currentTimeMillis() < signTime + (exp * 1000) / 2) {
             return false;
         }
         return true;
