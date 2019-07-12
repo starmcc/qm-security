@@ -124,7 +124,7 @@ public class QmSecurityTokenTools {
     public static boolean reauthorizationIsRequired(long exp, long signTime) {
         // 如果exp等于0表示该token永久不过期
         if (exp == 0) {
-            return true;
+            return false;
         }
         // 机制为 当前时间 是否小于 (签发时间 + 失效时长 / 2)
         // 生成(签发时间 + 失效时长 / 2)的token过期时间
