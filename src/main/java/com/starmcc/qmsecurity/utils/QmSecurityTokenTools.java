@@ -127,7 +127,9 @@ public class QmSecurityTokenTools {
             return true;
         }
         // 机制为 当前时间 是否小于 (签发时间 + 失效时长 / 2)
-        if (System.currentTimeMillis() < signTime + (exp * 1000) / 2) {
+        // 生成(签发时间 + 失效时长 / 2)的token过期时间
+        Date tokenExp = new Date(signTime + (exp * 1000 / 2));
+        if (System.currentTimeMillis() < tokenExp.getTime()) {
             return false;
         }
         return true;
