@@ -1,4 +1,4 @@
-#  qm-security - 安全框架 1.0.2
+#  qm-security - 安全框架 1.0.3 Release
 
 ## 1. Maven
 
@@ -10,7 +10,7 @@
 <dependency>
   <groupId>com.starmcc</groupId>
   <artifactId>qm-security</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3-RELEASE</version>
 </dependency>
 ```
 
