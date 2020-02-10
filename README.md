@@ -44,7 +44,7 @@
 <dependency>
   <groupId>com.starmcc</groupId>
   <artifactId>qm-security</artifactId>
-  <version>1.0.3-RELEASE</version>
+  <version>x.x.x-RELEASE</version>
 </dependency>
 ```
 

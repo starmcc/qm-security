@@ -61,7 +61,7 @@ public class QmSecurityBasicImplementation implements QmSecurityBasic {
             // ===================token过期==================
             QmSecurityContent.getRealm().noPassCallBack(5, request, response);
             return false;
-        } else if (QmSecurityTokenTools.reauthorizationIsRequired(tokenExpireTime, signTime)) {
+        } else if (QmSecurityContent.getRealm().verifyRestartToken(tokenExpireTime, signTime)) {
             // reauthorizationIsRequired 是否需要重新授权，如果是则走这里。
             LOG.debug("※尝试重新签发token※");
             QmSecurityTokenTools.restartCreateToken(qmUserInfoAuth, response);

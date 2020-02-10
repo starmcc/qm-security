@@ -5,6 +5,8 @@ import com.starmcc.qmsecurity.entity.QmUserInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,7 +22,11 @@ public interface QmSecurityRealm {
      * @param qmUserInfo 用户对象
      * @return
      */
-    List<String> authorizationMatchingURI(QmUserInfo qmUserInfo);
+    public default List<String> authorizationMatchingURI(QmUserInfo qmUserInfo){
+        List<String> list = new ArrayList<>();
+        list.add("/**");
+        return list;
+    }
 
 
     /**
@@ -44,6 +50,31 @@ public interface QmSecurityRealm {
      * @param response HttpServletResponse
      * @throws Exception
      */
-    void noPassCallBack(int type, HttpServletRequest request, HttpServletResponse response) throws Exception;
+    public default void noPassCallBack(int type, HttpServletRequest request, HttpServletResponse response) throws Exception{
+        response.getWriter().print("安全检测不通过!");
+    }
+
+
+    /**
+     * 提供给调用者什么时候进行重置token。
+     * 默认机制为 当前时间 是否小于 (签发时间 + 失效时长 / 2)
+     *
+     * @param tokenExpireTime
+     * @param signTime
+     * @return 返回true表示需要重置，返回false表示不重置。
+     */
+    public default boolean verifyRestartToken(long tokenExpireTime, long signTime){
+        // 如果exp等于0表示该token永久不过期
+        if (tokenExpireTime <= 0) {
+            return false;
+        }
+        // 机制为 当前时间 是否小于 (签发时间 + 失效时长 / 2)
+        // 生成(签发时间 + 失效时长 / 2)的token过期时间
+        Date tokenExp = new Date(signTime + (tokenExpireTime * 1000 / 2));
+        if (System.currentTimeMillis() < tokenExp.getTime()) {
+            return false;
+        }
+        return true;
+    }
 
 }

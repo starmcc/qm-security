@@ -114,27 +114,6 @@ public class QmSecurityTokenTools {
         return true;
     }
 
-    /**
-     * 判断是否需要重新授权
-     *
-     * @param exp
-     * @param signTime
-     * @return boolean 如果需要重新授权则返回true 否则返回false
-     */
-    public static boolean reauthorizationIsRequired(long exp, long signTime) {
-        // 如果exp等于0表示该token永久不过期
-        if (exp == 0) {
-            return false;
-        }
-        // 机制为 当前时间 是否小于 (签发时间 + 失效时长 / 2)
-        // 生成(签发时间 + 失效时长 / 2)的token过期时间
-        Date tokenExp = new Date(signTime + (exp * 1000 / 2));
-        if (System.currentTimeMillis() < tokenExp.getTime()) {
-            return false;
-        }
-        return true;
-    }
-
 
     /**
      * 解析token

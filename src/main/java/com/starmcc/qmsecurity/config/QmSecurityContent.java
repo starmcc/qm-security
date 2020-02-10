@@ -1,9 +1,11 @@
 package com.starmcc.qmsecurity.config;
 
 
+import com.starmcc.qmsecurity.entity.QmUserInfo;
 import com.starmcc.qmsecurity.realm.QmSecurityRealm;
-import com.starmcc.qmsecurity.realm.QmSecurityRealmTemplate;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +26,12 @@ public class QmSecurityContent {
         cacheMap.put("headerTokenKeyName", "token");
         cacheMap.put("encryptNumber", 2);
         cacheMap.put("passUris", new ArrayList<>());
-        cacheMap.put("realm", new QmSecurityRealmTemplate());
+        cacheMap.put("realm", new QmSecurityRealm() {
+            @Override
+            public QmUserInfo authorizationUserInfo(QmUserInfo qmUserInfo, HttpServletRequest request, HttpServletResponse response) {
+                return qmUserInfo;
+            }
+        });
     }
 
     /**
