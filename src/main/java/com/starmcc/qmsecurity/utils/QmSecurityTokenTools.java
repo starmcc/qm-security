@@ -105,7 +105,7 @@ public class QmSecurityTokenTools {
         if (exp == 0) {
             return true;
         }
-        Date tokenExp = new Date(signTime + (exp * 1000));
+        Date tokenExp = new Date(signTime + exp);
         // 校验token是否失效
         if (tokenExp.getTime() <= System.currentTimeMillis()) {
             // 失效了。

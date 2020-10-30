@@ -1,14 +1,9 @@
 package com.starmcc.qmsecurity.config;
 
 
-import com.starmcc.qmsecurity.entity.QmUserInfo;
 import com.starmcc.qmsecurity.realm.QmSecurityRealm;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,20 +13,12 @@ import java.util.Map;
  */
 public class QmSecurityContent {
 
-    private static Map<String, Object> cacheMap;
+    private final static Map<String, Object> CACHE_MAP = new HashMap<>(16);
 
     static {
-        cacheMap = new HashMap<>(16);
-        cacheMap.put("tokenSecret", "tokenSecret");
-        cacheMap.put("headerTokenKeyName", "token");
-        cacheMap.put("encryptNumber", 2);
-        cacheMap.put("passUris", new ArrayList<>());
-        cacheMap.put("realm", new QmSecurityRealm() {
-            @Override
-            public QmUserInfo authorizationUserInfo(QmUserInfo qmUserInfo, HttpServletRequest request, HttpServletResponse response) {
-                return qmUserInfo;
-            }
-        });
+        CACHE_MAP.put("tokenSecret", "tokenSecret");
+        CACHE_MAP.put("headerTokenKeyName", "token");
+        CACHE_MAP.put("encryptNumber", 2);
     }
 
     /**
@@ -40,7 +27,7 @@ public class QmSecurityContent {
      * @param secret
      */
     public static void setTokenSecret(String secret) {
-        cacheMap.put("tokenSecret", secret);
+        CACHE_MAP.put("tokenSecret", secret);
     }
 
     /**
@@ -49,7 +36,7 @@ public class QmSecurityContent {
      * @return
      */
     public static String getTokenSecret() {
-        return (String) cacheMap.get("tokenSecret");
+        return (String) CACHE_MAP.get("tokenSecret");
     }
 
     /**
@@ -58,7 +45,7 @@ public class QmSecurityContent {
      * @param secret
      */
     public static void setHeaderTokenKeyName(String key) {
-        cacheMap.put("headerTokenKeyName", key);
+        CACHE_MAP.put("headerTokenKeyName", key);
     }
 
     /**
@@ -67,7 +54,7 @@ public class QmSecurityContent {
      * @return
      */
     public static String getHeaderTokenKeyName() {
-        return (String) cacheMap.get("headerTokenKeyName");
+        return (String) CACHE_MAP.get("headerTokenKeyName");
     }
 
     /**
@@ -76,7 +63,7 @@ public class QmSecurityContent {
      * @param secret
      */
     public static void setEncryptNumber(int num) {
-        cacheMap.put("encryptNumber", num);
+        CACHE_MAP.put("encryptNumber", num);
     }
 
     /**
@@ -85,25 +72,7 @@ public class QmSecurityContent {
      * @return
      */
     public static int getEncryptNumber() {
-        return Integer.parseInt(cacheMap.get("encryptNumber").toString());
-    }
-
-    /**
-     * 设置排除URI校验集合
-     *
-     * @param secret
-     */
-    public static void setPassUris(List<String> passUris) {
-        cacheMap.put("passUris", passUris);
-    }
-
-    /**
-     * 获取排除URI校验集合
-     *
-     * @return
-     */
-    public static List<String> getPassUris() {
-        return (List<String>) cacheMap.get("passUris");
+        return Integer.parseInt(CACHE_MAP.get("encryptNumber").toString());
     }
 
     /**
@@ -112,7 +81,7 @@ public class QmSecurityContent {
      * @param realm
      */
     public static void setRealm(QmSecurityRealm realm) {
-        cacheMap.put("realm", realm);
+        CACHE_MAP.put("realm", realm);
     }
 
     /**
@@ -121,7 +90,7 @@ public class QmSecurityContent {
      * @param realm
      */
     public static QmSecurityRealm getRealm() {
-        return (QmSecurityRealm) cacheMap.get("realm");
+        return (QmSecurityRealm) CACHE_MAP.get("realm");
     }
 
 }

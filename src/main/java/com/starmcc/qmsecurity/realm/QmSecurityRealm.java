@@ -5,7 +5,6 @@ import com.starmcc.qmsecurity.entity.QmUserInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,11 +21,7 @@ public interface QmSecurityRealm {
      * @param qmUserInfo 用户对象
      * @return
      */
-    public default List<String> authorizationMatchingURI(QmUserInfo qmUserInfo){
-        List<String> list = new ArrayList<>();
-        list.add("/**");
-        return list;
-    }
+    List<String> authorizationMatchingUri(QmUserInfo qmUserInfo);
 
 
     /**
@@ -45,12 +40,12 @@ public interface QmSecurityRealm {
      * 当安全检测不通过时回调该接口
      * 回调该接口最好的处理方式是处理相关业务并推送错误信息。
      *
-     * @param type     1=检测不到token拒绝访问 | 2=非法token,token提取失败 | 3=授权验证authorizationUserInfo拦截 | 4=权限不足,拒绝访问 | 5=token失效 | 6=请求路径错误，404
+     * @param type     1=检测不到token拒绝访问 | 2=非法token,token提取失败 | 3=授权验证authorizationUserInfo拦截 | 4=权限不足,拒绝访问 | 5=token失效
      * @param request  HttpServletRequest
      * @param response HttpServletResponse
      * @throws Exception
      */
-    public default void noPassCallBack(int type, HttpServletRequest request, HttpServletResponse response) throws Exception{
+    default void noPassCallBack(int type, HttpServletRequest request, HttpServletResponse response) throws Exception {
         response.getWriter().print("安全检测不通过!");
     }
 
@@ -59,18 +54,18 @@ public interface QmSecurityRealm {
      * 提供给调用者什么时候进行重置token。
      * 默认机制为 当前时间 是否小于 (签发时间 + 失效时长 / 2)
      *
-     * @param tokenExpireTime
-     * @param signTime
+     * @param tokenExpireTime (毫秒)
+     * @param signTime        (毫秒)
      * @return 返回true表示需要重置，返回false表示不重置。
      */
-    public default boolean verifyRestartToken(long tokenExpireTime, long signTime){
+    default boolean verifyRestartToken(long tokenExpireTime, long signTime) {
         // 如果exp等于0表示该token永久不过期
         if (tokenExpireTime <= 0) {
             return false;
         }
         // 机制为 当前时间 是否小于 (签发时间 + 失效时长 / 2)
         // 生成(签发时间 + 失效时长 / 2)的token过期时间
-        Date tokenExp = new Date(signTime + (tokenExpireTime * 1000 / 2));
+        Date tokenExp = new Date(signTime + tokenExpireTime / 2);
         if (System.currentTimeMillis() < tokenExp.getTime()) {
             return false;
         }

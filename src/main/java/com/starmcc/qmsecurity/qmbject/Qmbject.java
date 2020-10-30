@@ -43,5 +43,5 @@ public interface Qmbject {
      *
      * @return List<String> 返回角色权限集合
      */
-    List<String> extractMatchingURI();
+    List<String> extractMatchingUri();
 }

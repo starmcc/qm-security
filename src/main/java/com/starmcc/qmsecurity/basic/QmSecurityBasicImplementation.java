@@ -55,7 +55,7 @@ public class QmSecurityBasicImplementation implements QmSecurityBasic {
         }
         LOG.info("※通过授权验证※");
         // 判断token是否过期
-        long tokenExpireTime = qmUserInfoAuth.getTokenExpireTime();
+        long tokenExpireTime = qmUserInfoAuth.getTokenExpireTime() * 1000;
         long signTime = qmUserInfoAuth.getSignTime().getTime();
         if (!QmSecurityTokenTools.verifyExp(tokenExpireTime, signTime)) {
             // ===================token过期==================
@@ -73,7 +73,7 @@ public class QmSecurityBasicImplementation implements QmSecurityBasic {
         if (isPerssions) {
             LOG.debug("※正在进行URI权限验证※");
             // 获取该角色的权限信息
-            List<String> matchingUrls = QmSecurityContent.getRealm().authorizationMatchingURI(qmUserInfoAuth);
+            List<String> matchingUrls = QmSecurityContent.getRealm().authorizationMatchingUri(qmUserInfoAuth);
             // 获取请求路由 校验该角色是否存在匹配当前请求url的匹配规则。
             if (!this.verifyMatchingURI(request.getServletPath(), matchingUrls)) {
                 LOG.info("※权限不足,拒绝访问※");
@@ -99,13 +99,6 @@ public class QmSecurityBasicImplementation implements QmSecurityBasic {
             // Spring提供的模糊路径匹配算法
             PathMatcher matcher = new AntPathMatcher();
             if (matcher.match(matchingUri, requestUri)) {
-                return true;
-            }
-        }
-        // 这些URI将被允许请求。
-        for (String passUri : QmSecurityContent.getPassUris()) {
-            PathMatcher matcher = new AntPathMatcher();
-            if (matcher.match(passUri, requestUri)) {
                 return true;
             }
         }

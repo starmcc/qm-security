@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author qm
@@ -75,9 +76,9 @@ public class QmSecurityManager implements Qmbject {
 
 
     @Override
-    public List<String> extractMatchingURI() {
+    public List<String> extractMatchingUri() {
         QmUserInfo qmUserInfo = this.getUserInfo();
-        return QmSecurityContent.getRealm().authorizationMatchingURI(qmUserInfo);
+        return QmSecurityContent.getRealm().authorizationMatchingUri(qmUserInfo);
     }
 
 
@@ -88,13 +89,13 @@ public class QmSecurityManager implements Qmbject {
      * @return
      */
     private boolean verifyQmUserInfo(QmUserInfo qmUserInfo) {
-        if (qmUserInfo == null) {
+        if (Objects.isNull(qmUserInfo)) {
             return false;
         }
         if ("".equals(qmUserInfo.getIdentify())) {
             return false;
         }
-        if (qmUserInfo.getUser() == null) {
+        if (Objects.isNull(qmUserInfo.getUser())) {
             return false;
         }
         return true;
