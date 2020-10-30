@@ -41,7 +41,7 @@ public class QmSecurityInterceptor implements HandlerInterceptor {
         // 判断是否为控制器方法
         if (!(handler instanceof HandlerMethod)) {
             // 如果不是则对象为 ResourceHttpRequestHandler MVC 方法跳过校验
-            return false;
+            return true;
         }
         // 获取方法对象
         HandlerMethod handlerMethod = (HandlerMethod) handler;
